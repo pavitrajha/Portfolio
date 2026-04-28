@@ -1,16 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pavitra Jha</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pavitra Jha</title>
+<meta name="description" content="Offensive security researcher focused on browser exploitation, Android and Linux kernel security, sandbox escapes, and exploitability analysis." />
+
+<style>
+body { margin:0; font-family: Georgia, serif; background:#f7f4ee; color:#111; }
+.container { max-width: 1000px; margin:auto; padding:80px 24px; }
+h1 { font-size: 56px; letter-spacing:-1px; margin-bottom:10px; }
+.sub { color:#555; font-size:18px; line-height:1.7; max-width:700px; }
+.section { margin-top:70px; }
+h2 { font-size:22px; margin-bottom:18px; }
+ul { line-height:1.9; color:#333; }
+.card { padding:20px; border:1px solid #ddd; margin-bottom:12px; border-radius:12px; background:#fffdf9; }
+a { color:#000; }
+.small { color:#666; font-size:14px; }
+</style>
 </head>
+
 <body>
-<header class="site-header"><a class="brand" href="index.html">Pavitra Jha</a><nav><a href="research.html">Research</a><a href="#record">Public Record</a><a href="#contact">Contact</a></nav></header>
-<main>
-<section class="hero"><p class="eyebrow">Offensive Security Researcher</p><h1>Independent offensive security research focused on difficult systems, durable fixes, and confidential work.</h1><p class="lede">The majority of substantive work is not publicly represented. Most serious research remains under confidential disclosure / NDA terms, or exists only as upstream patches, advisory work, and non-public remediation. Public disclosures represent a small visible subset of overall work.</p><a class="button" href="#record">Selected Public Record</a></section>
-<section class="section"><h2>Research Focus</h2><div class="grid"><article><h3>Browser & Runtime Security</h3><p>Engine internals, exploitability analysis, runtime behavior, and architecture-level flaw discovery.</p></article><article><h3>Kernel & Driver Attack Surface</h3><p>Linux and Android kernel analysis, memory safety review, race surfaces, and upstream remediation.</p></article><article><h3>Reverse Engineering</h3><p>Static and dynamic analysis across closed and open systems, root-cause tracing, and offensive modeling.</p></article></div></section>
-<section id="record" class="section"><h2>Selected Public Record</h2><div class="timeline"><a href="https://lore.kernel.org/all/?q=Pavitra+Jha" target="_blank"><strong>Linux Kernel Upstream Security Patches</strong><span>Upstream vulnerability fixes and reviewed kernel contributions.</span></a><a href="https://www.philips.com/a-w/security/coordinated-vulnerability-disclosure/hall-of-honors.html" target="_blank"><strong>Philips Hall of Honors (2026)</strong><span>Recognition for coordinated disclosure involving a healthcare imaging product vulnerability.</span></a><a href="https://www.oracle.com/security-alerts/cpujul2024.html" target="_blank"><strong>Oracle Critical Patch Update (2024)</strong><span>Client-side application security issue recognized in Oracle's public advisory.</span></a><a href="https://www.linkedin.com/posts/nullcon_nullcongoa2023-infosec-conference-activity-7102622075843993600-64dZ" target="_blank"><strong>Nullcon Scholarship (2023)</strong><span>Scholarship recognition for security research.</span></a><a href="https://www.linkedin.com/posts/cybersherlock_cybersecurity-nullmeetmumbai-itminstitute-activity-7195110088628416512-Cg-U" target="_blank"><strong>Conference Talk (2025)</strong><span>Prototype Pollution and Regular Expression Denial of Service.</span></a><a href="https://open.spotify.com/episode/4q6rhJsXgfwRTaq5ts32MN" target="_blank"><strong>Hackers Behind the Code (2025)</strong><span>Long-form discussion on research journey and methodology.</span></a><a href="https://www.youtube.com/watch?v=K3DENG8kdYA" target="_blank"><strong>XSS Rat Interview (2025)</strong><span>Extended technical conversation on offensive security work.</span></a><div><strong>Indian Book of Records (2023)</strong><span>Official recognition recorded privately.</span></div></div></section>
-<section id="contact" class="section contact"><h2>Available for confidential security engagements and technical advisory.</h2><p>Private research, advisory work, architecture review, and high-complexity vulnerability analysis.</p><div class="links"><a href="https://linkedin.com/in/cybersherlock" target="_blank">LinkedIn</a><a href="mailto:jhapavitra98@gmail.com">jhapavitra98@gmail.com</a></div></section>
-</main><footer>Public work is only a small visible subset.</footer><script src="app.js"></script></body></html>
+<div class="container">
+
+<h1>Pavitra Jha</h1>
+<p class="sub">
+Offensive security researcher focused on browser exploitation, Android and Linux kernel security,
+sandbox escape research, reverse engineering, and exploitability analysis across complex systems.
+</p>
+
+<p class="sub">
+He is 17 years old and has been actively engaged in security research since the age of 9.
+His work spans low-level systems analysis, vulnerability research, and architecture-level security modeling.
+</p>
+
+<div class="section">
+<h2>Technical Capability</h2>
+<div class="card">Browser Exploitation — V8, JIT internals, memory corruption primitives, exploit construction</div>
+<div class="card">Android Security — framework attack surfaces, kernel interaction, SELinux reasoning, system-level analysis</div>
+<div class="card">Linux Kernel Security — drivers, race conditions, memory safety issues, upstream remediation analysis</div>
+<div class="card">Sandbox & Mitigations — ASLR, CFI, PAC, CFG, and sandbox escape research</div>
+<div class="card">Reverse Engineering — ARM64, x86/x64, binary analysis across Windows, Linux, Android</div>
+<div class="card">Fuzzing & Automation — targeted fuzzing, crash triage, exploitability validation pipelines</div>
+<div class="card">Source Code Audit — large-scale codebase review, vulnerability discovery, root-cause analysis</div>
+</div>
+
+<div class="section">
+<h2>Research Approach</h2>
+<ul>
+<li>Exploitability-first reasoning</li>
+<li>Architecture-level vulnerability analysis</li>
+<li>Combining logic flaws with memory corruption understanding</li>
+<li>Cross-boundary privilege escalation modeling</li>
+<li>Focus on root cause rather than surface-level bugs</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>Selected Public Record</h2>
+<ul>
+<li><a href="https://lore.kernel.org/all/?q=Pavitra+Jha">Linux kernel upstream contributions</a></li>
+<li><a href="https://www.philips.com/a-w/security/coordinated-vulnerability-disclosure/hall-of-honors.html">Philips Hall of Honor recognition</a></li>
+<li><a href="https://www.oracle.com/security-alerts/cpujul2024.html">Oracle security advisory inclusion</a></li>
+<li><a href="https://open.spotify.com/episode/4q6rhJsXgfwRTaq5ts32MN">Hackers Behind the Code podcast</a></li>
+<li><a href="https://www.youtube.com/watch?v=K3DENG8kdYA">Interview with XSS-Rat</a></li>
+</html>
