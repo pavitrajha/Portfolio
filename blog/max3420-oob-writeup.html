@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>MAX3420 USB UDC: Endpoint Index Out-of-Bounds</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<article>
+
+<h1>MAX3420 USB Device Controller: Endpoint Index Out-of-Bounds via wIndex</h1>
+
+<p>
+This report describes an out-of-bounds read and write condition in the MAX3420 USB Device Controller driver.
+The issue stems from using a host-controlled <code>wIndex</code> field from USB SETUP packets as an array index
+without validating it against the endpoint table size.
+</p>
+
+<p>
+Because the driver operates in USB device mode, all control requests originate from an untrusted USB host.
+Fields in SETUP packets must therefore be treated as attacker-controlled inputs.
+</p>
+
+<hr>
+
+<h2>Overview</h2>
+
+<p>
+The driver derives an endpoint index directly from the USB request:
+</p>
+
+<pre>
+id = udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK;
+</pre>
+
+<p>
+where:</p>
+
+<pre>
+USB_ENDPOINT_NUMBER_MASK = 0x0f  // range 0–15
+MAX3420_MAX_EPS = 4             // valid range 0–3
+</pre>
+
+<p>
+No validation is performed to ensure the derived index is within bounds before indexing:
+</p>
+
+<pre>
+udc->ep[id]
+</pre>
+
+<p>
+This creates a direct out-of-bounds access into a fixed-size kernel array.
+</p>
+
+<hr>
+
+<h2>Attack Surface</h2>
+
+<p>
+USB SETUP packets are received from hardware via SPI FIFO registers and passed into driver state without sanitization:
+</p>
+
+<pre>
+spi_rd_buf(udc, MAX3420_REG_SUDFIFO, &setup, 8);
+
+udc->setup = setup;
+udc->setup.wIndex = cpu_to_le16(setup.wIndex);
+</pre>
+
+<p>
+The <code>wIndex</code> field is later used in control-flow and memory access decisions.
+</p>
+
+<hr>
+
+<h2>Vulnerable Access Pattern</h2>
+
+<p>
+The endpoint pointer is resolved directly from the unchecked index:
+</p>
+
+<pre>
+ep = &udc->ep[udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK];
+</pre>
+
+<p>
+Because <code>MAX3420_MAX_EPS = 4</code>, any value ≥ 4 results in out-of-bounds access.
+</p>
+
+<hr>
+
+<h2>Vulnerability 1: max3420_getstatus() OOB Read</h2>
+
+<p>
+In <code>max3420_getstatus()</code>, the endpoint structure is dereferenced directly:
+</p>
+
+<pre>
+ep = &udc->ep[udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK];
+</pre>
+
+<p>
+If the derived index exceeds bounds, <code>ep</code> points outside the array.
+Subsequent field reads operate on invalid memory.
+</p>
+
+<p>
+This results in a kernel heap out-of-bounds read when accessing endpoint state fields.
+</p>
+
+<hr>
+
+<h2>Vulnerability 2: max3420_set_clear_feature() OOB Write</h2>
+
+<p>
+In <code>max3420_set_clear_feature()</code>, the same unchecked index is used:
+</p>
+
+<pre>
+id = udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK;
+ep = &udc->ep[id];
+</pre>
+
+<p>
+The returned pointer is later used for state modification operations on the endpoint structure.
+</p>
+
+<p>
+If <code>id ≥ MAX3420_MAX_EPS</code>, writes occur outside the bounds of the endpoint array,
+corrupting adjacent kernel memory.
+</p>
+
+<hr>
+
+<h2>Memory Layout Impact</h2>
+
+<p>
+The endpoint table is embedded in a fixed-size structure:
+</p>
+
+<pre>
+struct max3420_ep ep[4];
+</pre>
+
+<p>
+Consequences of out-of-bounds indexing:
+</p>
+
+<ul>
+<li>Indices 0–3: valid endpoint objects</li>
+<li>Indices ≥ 4: adjacent fields within <code>struct max3420_udc</code></li>
+<li>Further indices: spill into surrounding heap allocation</li>
+</ul>
+
+<p>
+Because the array is contiguous in memory, OOB access directly overlaps unrelated driver state.
+</p>
+
+<hr>
+
+<h2>Trigger Condition</h2>
+
+<p>
+A malformed USB control request can trigger the issue:
+</p>
+
+<pre>
+bmRequestType = 0x02
+bRequest      = SET_FEATURE
+wValue        = ENDPOINT_HALT
+wIndex        = 0x0007
+wLength       = 0x0000
+</pre>
+
+<p>
+Here, <code>wIndex = 7</code> produces an endpoint index outside the valid range [0–3].
+</p>
+
+<hr>
+
+<h2>Execution Flow</h2>
+
+<p>
+The vulnerable path is reachable through standard USB interrupt handling:
+</p>
+
+<pre>
+max3420_handle_irqs()
+    → SUDAVIRQ detected
+        → max3420_handle_setup()
+            → SPI read from SUDFIFO
+            → max3420_getstatus()
+               OR max3420_set_clear_feature()
+                   → udc->ep[index] (unchecked)
+</pre>
+
+<p>
+No validation occurs between packet reception and array access.
+</p>
+
+<hr>
+
+<h2>Crash Evidence</h2>
+
+<h3>AddressSanitizer report (userspace harness)</h3>
+
+<pre>
+runtime error: index 7 out of bounds for type 'max3420_ep [4]'
+ERROR: AddressSanitizer: heap-buffer-overflow
+
+WRITE of size 1 at 0x... (168 bytes past region)
+
+#0 max3420_set_clear_feature
+#1 run_test
+#2 main
+</pre>
+
+<p>
+The failure occurs because the computed index (7) exceeds the allocated array size (4),
+leading to an out-of-bounds write into adjacent memory.
+</p>
+
+<hr>
+
+<h2>Root Cause</h2>
+
+<p>
+The vulnerability arises from treating a masked USB field as a trusted bounded index:
+</p>
+
+<pre>
+wIndex & USB_ENDPOINT_NUMBER_MASK
+</pre>
+
+<p>
+The mask reduces values to 0–15, but no secondary validation enforces the actual array bounds.
+</p>
+
+<p>
+This disconnect between protocol encoding and memory layout results in unsafe indexing.
+</p>
+
+<hr>
+
+<h2>Fix</h2>
+
+<p>
+Bounds validation must occur before array access:
+</p>
+
+<pre>
+id = udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK;
+
+if (id >= MAX3420_MAX_EPS)
+    goto stall;
+
+ep = &udc->ep[id];
+</pre>
+
+<p>
+This check must be applied consistently across all endpoint-accessing functions.
+</p>
+
+<hr>
+
+<h2>Affected Scope</h2>
+
+<p>
+All kernels containing the MAX3420 USB Device Controller driver are affected.
+</p>
+
+</article>
+
+</body>
+</html>
