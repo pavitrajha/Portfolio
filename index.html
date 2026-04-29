@@ -17,7 +17,6 @@ ul { line-height:1.9; color:#333; padding-left:18px; }
 .card { padding:18px 20px; border:1px solid #ddd; margin-bottom:12px; border-radius:12px; background:#fffdf9; }
 .small { color:#666; font-size:14px; line-height:1.7; }
 a { color:#111; }
-.hr { height:1px; background:#ddd; margin:60px 0; }
 </style>
 </head>
 <body>
@@ -26,32 +25,37 @@ a { color:#111; }
 <h1>Pavitra Jha</h1>
 
 <p class="sub">
-Offensive security researcher focused on browser exploitation, Android and Linux kernel security,
-sandbox escape research, reverse engineering, and exploitability-driven vulnerability analysis across complex systems.
+Pavitra Jha is an offensive security researcher focused on deep system level vulnerability research across browser engines, Android internals, and Linux kernel subsystems. His work targets real-world exploitability conditions in production software rather than isolated theoretical bugs.
 </p>
 
 <p class="sub">
-He is 17 years old and has been engaged in security research since the age of 9.
-His work spans vulnerability research, system-level analysis, and architecture-focused offensive security modeling.
+He is 17 years old and has been actively engaged in security research since the age of 9. His focus spans execution engine internals, kernel attack surfaces, sandbox isolation boundaries, and architecture level failure conditions that lead to privilege escalation.
 </p>
 
 <div class="section">
 <h2>Technical Capability</h2>
 
-<div class="card"><b>Browser Security</b> - V8 internals, JIT optimization layers, memory corruption primitives, exploit construction techniques</div>
-<div class="card"><b>Android Security</b> - framework attack surfaces, Binder IPC analysis, SELinux policy reasoning, kernel interaction paths</div>
-<div class="card"><b>Linux Kernel Security</b> - driver attack surfaces, race conditions, memory safety flaws, upstream remediation analysis</div>
-<div class="card"><b>Sandbox & Mitigations</b> - ASLR, KASLR, CFG, CFI, PAC, sandbox escape research and bypass strategies</div>
-<div class="card"><b>Reverse Engineering</b> - ARM64, x86/x64 analysis across Windows, Linux, and Android systems</div>
-<div class="card"><b>Fuzzing & Automation</b> - targeted fuzzing, crash triage, exploitability validation, custom harness design</div>
-<div class="card"><b>Source Code Audit</b> - large-scale code review, vulnerability discovery, root-cause analysis in complex systems</div>
+<div class="card"><b>Browser Security</b> - Deep analysis of V8 and JIT compilation pipelines including TurboFan optimization stages, type inference failures, memory layout manipulation, and exploitation primitives such as out-of-bounds access, type confusion, and use-after-free conditions under modern mitigation systems.</div>
+
+<div class="card"><b>Android Security</b> - Security analysis of Android framework and kernel boundary interactions including Binder IPC model, SELinux enforcement logic, system service attack surfaces, permission boundary violations, and kernel-user space escalation paths.</div>
+
+<div class="card"><b>Linux Kernel Security</b> - Kernel level vulnerability research across drivers, memory management, concurrency control, and race condition exploitation with focus on unsafe memory access patterns and upstream remediation behavior in production kernels.</div>
+
+<div class="card"><b>Sandbox & Mitigations</b> - Analysis of ASLR, KASLR, CFG, CFI, PAC, and sandbox isolation layers with focus on identifying real-world bypass conditions under complex execution flows and weak architectural assumptions.</div>
+
+<div class="card"><b>Reverse Engineering</b> - Cross architecture binary analysis across ARM64, x86, and x64 systems spanning Windows, Linux, and Android including static analysis, dynamic tracing, and behavioral reconstruction of closed-source components.</div>
+
+<div class="card"><b>Fuzzing & Automation</b> - Design of targeted fuzzing systems including structured input generation, crash triage pipelines, exploitability validation, and custom harness development for both kernel and user space targets.</div>
+
+<div class="card"><b>Source Code Audit</b> - Large scale codebase analysis focused on architectural flaws, unsafe design patterns, and multi-stage vulnerability chains emerging across system boundaries rather than isolated implementation bugs.</div>
 
 </div>
 
 <div class="section">
 <h2>Research Approach</h2>
 <ul>
-<li>Exploitability-first reasoning model</li>
-<li>Architecture-level vulnerability analysis</li>
-<li>Combining logic flaws with memory corruption understanding</li>
+<li>Exploitability first reasoning applied across all research domains</li>
+<li>Architecture level vulnerability discovery beyond implementation level bugs</li>
+<li>Combination of logic flaws and memory corruption for multi stage exploitation paths</li>
+<li>Cross boundary privilege escalation modeling across browser, OS, and kernel layers</li>
 </html>
