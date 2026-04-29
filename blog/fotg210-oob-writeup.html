@@ -1,23 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FOTG210 UDC OOB Write-up</title>
+<link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+
+<div class="container">
+
 <article>
 
-<h1>One Cable, Three Bugs: Slab Out-of-Bounds in the Linux FOTG210 USB Device Controller</h1>
+<h1>3x slab-out-of-bounds in fotg210 UDC via attacker-controlled wIndex</h1>
 
 <p>
-This write-up documents three independent out-of-bounds memory access vulnerabilities in the Linux kernel FOTG210 USB Device Controller driver.
-The issues stem from missing bounds validation on attacker-controlled USB control request fields, specifically <code>wIndex</code>, which directly influences endpoint indexing.
+Bounds-check omission in <code>drivers/usb/fotg210/fotg210-udc.c</code> leads to three independently reachable out-of-bounds accesses of <code>fotg210_udc.ep[]</code>.
+</p>
+
+<p>
+The endpoint array is declared with <code>FOTG210_MAX_NUM_EP = 5</code> (valid indices 0–4), but request handlers derive an endpoint number from:
+</p>
+
+<pre>
+ctrl->wIndex & USB_ENDPOINT_NUMBER_MASK
+</pre>
+
+<p>
+This produces values 0–15 with no bounds validation before indexing <code>fotg210->ep[epnum]</code>.
+</p>
+
+<p>
+A malicious USB host can send a crafted SETUP packet with <code>wIndex >= 9</code>, triggering slab-out-of-bounds reads beyond the <code>fotg210_udc</code> allocation and immediate dereference in multiple execution paths.
+</p>
+
+<p>
+All three vulnerabilities are independently confirmed by KASAN slab-out-of-bounds reports on kernel 7.0.0-rc7+ via PoC modules:
+</p>
+
+<ul>
+<li>poc1_clear_feature.ko</li>
+<li>poc2_set_feature.ko</li>
+<li>poc3_get_status.ko</li>
+</ul>
+
+<hr>
+
+<h2>1. Environment</h2>
+
+<pre>
+Kernel    : Linux 7.0.0-rc7+
+Arch      : x86_64 (QEMU i440FX)
+KASAN     : enabled (generic + inline)
+KASLR     : disabled (nokaslr)
+</pre>
+
+<hr>
+
+<h2>2. Threat Model</h2>
+
+<p>
+USB device controller runs on the peripheral side. Attacker is a malicious USB host.
+No authentication required. Attack surface is USB SETUP packet processing.
 </p>
 
 <hr>
 
-<h2>Overview</h2>
+<h2>3. Root Cause</h2>
 
 <p>
-The FOTG210 USB device controller processes USB SETUP packets received from a connected host. These packets are fully attacker-controlled in USB peripheral mode.
-A missing validation of endpoint indices derived from <code>wIndex</code> leads to out-of-bounds access into the <code>fotg210->ep[]</code> array.
-</p>
-
-<p>
-The array is defined as:
+Structure:
 </p>
 
 <pre>
@@ -26,150 +79,115 @@ struct fotg210_ep *ep[5];
 </pre>
 
 <p>
-Valid indices are 0–4, but the driver derives indices using:
+But index is derived from:
 </p>
 
 <pre>
-ctrl->wIndex & USB_ENDPOINT_NUMBER_MASK   // yields 0–15
+USB_ENDPOINT_NUMBER_MASK = 0x0f   // 0–15
 </pre>
 
 <p>
-No bounds check is performed before indexing, leading to slab out-of-bounds reads and dereferences.
+No bounds validation exists before indexing.
 </p>
+
+<p>
+Heap layout confirms ep[] sits near end of struct:
+</p>
+
+<pre>
+ep[5] @ offset 952 → kmalloc-1k boundary at 1024
+</pre>
+
+<p>
+Thus:
+</p>
+
+<ul>
+<li>0–4: valid</li>
+<li>5–8: intra-object corruption</li>
+<li>9–15: slab OOB</li>
+</ul>
 
 <hr>
 
-<h2>Root Cause</h2>
+<h2>4. Vulnerabilities</h2>
 
-<p>
-The vulnerability originates from direct use of attacker-controlled <code>wIndex</code> without validation against <code>FOTG210_MAX_NUM_EP</code>.
-This allows indices beyond the allocated endpoint array to be used as pointers.
-</p>
-
-<p>
-Since <code>fotg210->ep</code> resides near the end of the <code>fotg210_udc</code> structure, out-of-bounds indexing transitions into adjacent kernel heap memory and eventually crosses slab boundaries.
-</p>
-
-<hr>
-
-<h2>Vulnerability 1: clear_feature OOB Read + Dereference</h2>
-
-<p>
-In <code>fotg210_clear_feature()</code>, the endpoint pointer is resolved directly from unchecked index computation:
-</p>
+<h3>Vuln 1 — clear_feature OOB dereference</h3>
 
 <pre>
 ep = fotg210->ep[ctrl->wIndex & USB_ENDPOINT_NUMBER_MASK];
-</pre>
-
-<p>
-For <code>wIndex >= 5</code>, this results in an out-of-bounds pointer read.
-The pointer is immediately dereferenced via:
-</p>
-
-<pre>
 ep->wedged
 </pre>
 
 <p>
-This leads to either:
+Out-of-bounds pointer is dereferenced immediately, leading to crash or struct reinterpretation of adjacent heap memory.
 </p>
 
+<hr>
+
+<h3>Vuln 2 — set_feature MMIO corruption chain</h3>
+
+<pre>
+ep = fotg210->ep[epnum];
+fotg210_set_epnstall(ep);
+</pre>
+
+<p>
+OOB pointer fields (<code>fotg210</code>, <code>dir_in</code>, <code>epnum</code>) are used to compute MMIO register addresses:
+</p>
+
+<pre>
+iowrite32(value, reg);
+</pre>
+
+<p>
+Heap corruption directly influences hardware register access.
+</p>
+
+<hr>
+
+<h3>Vuln 3 — get_status information leak path</h3>
+
+<pre>
+fotg210_is_epnstall(fotg210->ep[epnum]);
+</pre>
+
+<p>
+OOB-derived fields are used in:
+</p>
+
+<pre>
+ioread32(reg);
+</pre>
+
+<p>
+Result propagates into USB response via <code>ep0_data</code>.
+</p>
+
+<hr>
+
+<h2>5. KASAN Summary</h2>
+
+<pre>
+BUG: slab-out-of-bounds in fotg210_* functions
+Read past kmalloc-1k boundary
+Offset overflow ~120 bytes beyond allocated region
+</pre>
+
+<hr>
+
+<h2>6. Impact</h2>
+
 <ul>
-<li>Null pointer dereference if OOB memory contains zeroed slab data</li>
-<li>Adjacent object memory interpretation as struct fotg210_ep, leading to unsafe field access</li>
+<li>Kernel slab OOB read</li>
+<li>Cross-object heap interpretation</li>
+<li>MMIO address manipulation via corrupted struct fields</li>
+<li>Information leak via USB control response</li>
 </ul>
 
 <hr>
 
-<h2>Vulnerability 2: set_feature OOB Dereference Chain</h2>
-
-<p>
-In <code>fotg210_set_feature()</code>, the same unchecked index is used:
-</p>
-
-<pre>
-epnum = ctrl->wIndex & USB_ENDPOINT_NUMBER_MASK;
-fotg210_set_epnstall(fotg210->ep[epnum]);
-</pre>
-
-<p>
-The OOB pointer is later dereferenced inside:
-</p>
-
-<pre>
-ep->fotg210
-ep->dir_in
-ep->epnum
-</pre>
-
-<p>
-These values are used to compute MMIO register addresses, which results in hardware register access controlled by corrupted kernel heap data.
-</p>
-
-<hr>
-
-<h2>Vulnerability 3: get_status OOB Read Leading to Information Leak</h2>
-
-<p>
-In <code>fotg210_get_status()</code>, the OOB pointer is used to compute endpoint stall status:
-</p>
-
-<pre>
-fotg210_is_epnstall(fotg210->ep[epnum])
-</pre>
-
-<p>
-This propagates OOB-derived values into:
-</p>
-
-<pre>
-fotg210->ep0_data
-</pre>
-
-<p>
-The result is returned to the USB host, creating a potential information leak channel derived from kernel heap contents.
-</p>
-
-<hr>
-
-<h2>Threat Model</h2>
-
-<p>
-The attacker is a malicious USB host connected via physical USB or OTG interface.
-No authentication or privileges are required.
-</p>
-
-<p>
-The vulnerability is reachable at device enumeration or during normal USB control transfer handling.
-</p>
-
-<hr>
-
-<h2>Impact</h2>
-
-<p>
-All three vulnerabilities allow:
-</p>
-
-<ul>
-<li>Kernel slab out-of-bounds read</li>
-<li>OOB pointer dereference leading to kernel crash</li>
-<li>Indirect MMIO register manipulation via corrupted struct fields</li>
-<li>Potential information disclosure via USB response path</li>
-</ul>
-
-<p>
-Since USB control requests are unauthenticated and device-facing, exploitation requires only physical or peripheral adjacency.
-</p>
-
-<hr>
-
-<h2>Fix</h2>
-
-<p>
-The root issue is missing bounds validation on <code>wIndex</code>.
-</p>
+<h2>7. Fix</h2>
 
 <pre>
 u8 epnum = ctrl->wIndex & USB_ENDPOINT_NUMBER_MASK;
@@ -183,35 +201,8 @@ struct fotg210_ep *ep = fotg210->ep[epnum];
 </pre>
 
 <p>
-All endpoint access must validate against <code>FOTG210_MAX_NUM_EP</code> before dereferencing.
+All accesses must validate before dereferencing.
 </p>
-
-<hr>
-
-<h2>Affected Versions</h2>
-
-<p>
-All Linux kernel versions containing the FOTG210 UDC driver since initial introduction.
-</p>
-
-<hr>
-
-<h2>Notes</h2>
-
-<p>
-This issue demonstrates a recurring pattern in USB controller drivers:
-attacker-controlled control-plane fields being used directly as kernel pointers without validation.
-</p>
-
-<p>
-Similar classes of bugs frequently lead to:
-</p>
-
-<ul>
-<li>Kernel memory corruption</li>
-<li>Heap spraying via USB descriptors</li>
-<li>Device-side privilege escalation chains</li>
-</ul>
 
 <hr>
 
@@ -220,6 +211,12 @@ Similar classes of bugs frequently lead to:
 <p>
 Pavitra Jha<br>
 Offensive Security Researcher<br>
+Kernel / Exploitation Research
 </p>
 
 </article>
+
+</div>
+
+</body>
+</html>
