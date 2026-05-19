@@ -1,17 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
 <title>Pavitra Jha</title>
-
 <link rel="stylesheet" href="style.css" />
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
@@ -25,278 +20,175 @@
 <div class="logo">PAVITRA JHA</div>
 
 <div class="nav-links">
-<a href="#research">Research</a>
+<a href="#capability">Capability</a>
+<a href="#record">Public Record</a>
 <a href="#blog">Blog</a>
-<a href="#recognition">Recognition</a>
 <a href="#contact">Contact</a>
 </div>
 </nav>
 
-<header class="hero">
+<header>
+<h1>Pavitra Jha</h1>
 
-<div class="hero-left">
-
-<div class="tag">
-OFFENSIVE SECURITY RESEARCH
-</div>
-
-<h1>
-Browser, Android & Linux Kernel Security Research
-</h1>
-
-<p class="hero-text">
-Security researcher focused on exploitability-driven vulnerability discovery,
-memory corruption, sandbox boundaries, execution engines, and kernel attack surfaces.
+<p class="sub">
+Offensive security researcher focused on browser, Android, and Linux kernel security with emphasis on real-world exploitability and system-level vulnerability research.
 </p>
 
-<div class="hero-buttons">
-<a href="#blog" class="primary-btn">Read Research</a>
-<a href="https://lore.kernel.org/all/?q=Pavitra+Jha" class="secondary-btn">LKML Activity</a>
-</div>
-
-</div>
-
-<div class="hero-right">
-
-<div class="stat-card">
-<span class="stat-number">9+</span>
-<span class="stat-label">Years Researching Security</span>
-</div>
-
-<div class="stat-card">
-<span class="stat-number">Kernel</span>
-<span class="stat-label">Driver & Memory Safety Research</span>
-</div>
-
-<div class="stat-card">
-<span class="stat-number">V8</span>
-<span class="stat-label">Execution Engine & Exploitation Focus</span>
-</div>
-
-</div>
-
+<p class="sub">
+16 years old. Security research since age 9. Work spans execution engines, kernel attack surfaces, sandbox boundaries, and privilege escalation paths in production systems.
+</p>
 </header>
 
-<section id="research">
+<section id="capability">
+<h2>Technical Capability</h2>
 
-<div class="section-title">
-<span></span>
-<h2>Technical Focus</h2>
-</div>
+<div class="card">Browser Security: V8 internals, JIT pipelines, memory corruption primitives, exploitation techniques under modern mitigations</div>
 
-<div class="grid">
+<div class="card">Android Security: framework attack surfaces, Binder IPC, SELinux policy, kernel interaction paths</div>
 
-<div class="card">
-<h3>Browser Security</h3>
-<p>
-V8 internals, JIT behavior, memory corruption primitives,
-mitigation-aware exploitation, and execution engine research.
-</p>
-</div>
+<div class="card">Linux Kernel Security: driver flaws, race conditions, memory safety issues, upstream fixes analysis</div>
 
-<div class="card">
-<h3>Linux Kernel</h3>
-<p>
-Driver attack surfaces, race conditions, OOB conditions,
-memory safety flaws, and subsystem-level analysis.
-</p>
-</div>
+<div class="card">Sandbox & Mitigations: ASLR, KASLR, CFG, CFI, PAC, sandbox escape conditions</div>
 
-<div class="card">
-<h3>Android Security</h3>
-<p>
-Binder IPC, SELinux policy behavior,
-framework trust boundaries, and privilege escalation paths.
-</p>
-</div>
+<div class="card">Reverse Engineering: ARM64, x86, x64 across Windows, Linux, Android</div>
 
-<div class="card">
-<h3>Reverse Engineering</h3>
-<p>
-ARM64, x86, and x64 reversing across Android,
-Linux, and Windows environments.
-</p>
-</div>
+<div class="card">Fuzzing: structured fuzzing, crash triage, exploitability validation, harness design</div>
 
-<div class="card">
-<h3>Fuzzing</h3>
-<p>
-Harness design, crash triage,
-coverage-driven fuzzing, and exploitability validation.
-</p>
-</div>
-
-<div class="card">
-<h3>Source Auditing</h3>
-<p>
-Large-scale architecture review,
-hybrid logic/memory corruption discovery,
-and exploitability-first analysis.
-</p>
-</div>
-
-</div>
-
+<div class="card">Source Audit: large-scale code review and architecture-level vulnerability discovery</div>
 </section>
 
 <section>
+<h2>Research Approach</h2>
 
-<div class="section-title">
-<span></span>
+<ul>
+<li>Exploitability-first reasoning model</li>
+<li>Architecture-level vulnerability discovery</li>
+<li>Logic + memory corruption hybrid exploitation thinking</li>
+<li>Cross-boundary privilege escalation modeling</li>
+<li>Systemic failure analysis over isolated bug hunting</li>
+</ul>
+</section>
+
+<section id="record">
 <h2>Selected Public Record</h2>
+
+<div class="card">
+Linux Kernel Security Contributions<br><br>
+Security-related kernel work involving driver-level issues, memory safety fixes, and upstream patch discussions across Linux subsystems.<br><br>
+<a href="https://lore.kernel.org/all/?q=Pavitra+Jha">Linux Kernel Mailing List (LKML)</a>
 </div>
 
-<div class="timeline">
-
-<div class="timeline-item">
-<h3>Linux Kernel Contributions</h3>
-<p>
-Security-related work involving upstream patches,
-driver analysis, and memory safety research across Linux subsystems.
-</p>
-
-<a href="https://lore.kernel.org/all/?q=Pavitra+Jha">
-View LKML Activity
-</a>
+<div class="card">
+Philips Healthcare Security Vulnerability (Firmware ROP / Image Management System 15.1)<br><br>
+Remote Code Execution (RCE) via a critical stack-based buffer overflow vulnerability in the processing component of Philips Image Management System 15.1 firmware. By overflowing the data buffer and utilizing a Return-Oriented Programming (ROP) chain, arbitrary code execution was achievable on host medical instrumentation. Validated and remediated via coordinated disclosure through Philips Product Security, resulting in a public Philips Hall of Honors induction (2026) in lieu of a standard CVE assignment.<br><br>
+<a href="https://www.philips.com/a-w/security/coordinated-vulnerability-disclosure/hall-of-honors.html">Philips Hall of Honors</a>
 </div>
 
-<div class="timeline-item">
-<h3>Philips Healthcare Firmware RCE</h3>
-<p>
-Stack-based buffer overflow leading to ROP-assisted remote code execution
-within Philips Image Management System firmware infrastructure.
-</p>
-
-<a href="https://www.philips.com/a-w/security/coordinated-vulnerability-disclosure/hall-of-honors.html">
-Philips Hall of Honors
-</a>
+<div class="card">
+Oracle Security Issue (Critical Customer Data Information Disclosure)<br><br>
+Critical information disclosure vulnerability affecting Oracle web infrastructure that exposed the user data of over 70,000 users, including payment details, email addresses, credentials, physical addresses, and organization information. The issue was resolved via total endpoint elimination through Oracle’s coordinated security disclosure program.<br><br>
+<a href="https://www.oracle.com/security-alerts/cpujul2024.html">Oracle CPU Advisory</a>
 </div>
 
-<div class="timeline-item">
-<h3>Oracle Infrastructure Disclosure</h3>
-<p>
-Critical information disclosure vulnerability affecting Oracle web infrastructure
-with exposure impact involving large-scale customer data.
-</p>
-
-<a href="https://www.oracle.com/security-alerts/cpujul2024.html">
-Oracle Advisory
-</a>
+<div class="card">
+Conference Research: Prototype Pollution and ReDoS<br><br>
+Research presentation covering prototype pollution exploitation patterns in JavaScript applications and regular expression denial-of-service conditions in real-world web systems.<br><br>
+<a href="https://www.linkedin.com/posts/cybersherlock_cybersecurity-nullmeetmumbai-itminstitute-activity-7195110088628416512-Cg-U">Conference Post</a>
 </div>
 
-<div class="timeline-item">
-<h3>Conference Research</h3>
-<p>
-Research presentation covering prototype pollution exploitation
-and ReDoS attack patterns in real-world systems.
-</p>
-
-<a href="https://www.linkedin.com/posts/cybersherlock_cybersecurity-nullmeetmumbai-itminstitute-activity-7195110088628416512-Cg-U">
-Conference Post
-</a>
+<div class="card">
+Nullcon Goa 2023 Scholarship<br><br>
+Selected scholarship recipient at Nullcon Goa 2023 for security research contributions and participation in offensive security and systems research discussions.<br><br>
+<a href="https://www.linkedin.com/posts/nullcon_nullcongoa2023-infosec-conference-activity-7102622075843993600-64dZ">Nullcon Post</a>
 </div>
 
+<div class="card">
+Podcast: Hackers Behind the Code<br><br>
+Technical podcast discussing offensive security research methodology, vulnerability discovery process, and real-world exploitation workflows.<br><br>
+<a href="https://open.spotify.com/episode/4q6rhJsXgfwRTaq5ts32MN">Spotify Episode</a>
 </div>
 
+<div class="card">
+Interview: XSS Rat (Technical Discussion)<br><br>
+Long-form technical discussion covering exploitation approaches, vulnerability research workflow, and offensive security engineering perspectives.<br><br>
+<a href="https://www.youtube.com/watch?v=K3DENG8kdYA">YouTube Video</a>
+</div>
 </section>
 
 <section id="blog">
-
-<div class="section-title">
-<span></span>
 <h2>Research Blog</h2>
-</div>
-
-<div class="blog-grid">
-
-<a class="blog-card" href="blog/t7xx-oob-writeup.html">
-<div class="blog-tag">LINUX KERNEL</div>
-<h3>Unchecked Modem Input</h3>
-<p>OOB read in the Linux kernel t7xx WWAN driver.</p>
-</a>
-
-<a class="blog-card" href="blog/max3420-oob-writeup.html">
-<div class="blog-tag">USB</div>
-<h3>wIndex Out of Bounds</h3>
-<p>Host-controlled memory corruption in MAX3420.</p>
-</a>
-
-<a class="blog-card" href="blog/fotg210-oob-writeup.html">
-<div class="blog-tag">DRIVERS</div>
-<h3>FOTG210 Slab OOB</h3>
-<p>Slab out-of-bounds conditions in X3 functions.</p>
-</a>
-
-<a class="blog-card" href="blog/wfx-use-after-free-writeup.html">
-<div class="blog-tag">WIRELESS</div>
-<h3>Race Conditions & UAF</h3>
-<p>Use-after-free in Silicon Labs wfx driver.</p>
-</a>
-
-<a class="blog-card" href="blog/ntfs3-log_replay-oob-writeup.html">
-<div class="blog-tag">FILESYSTEM</div>
-<h3>NTFS3 Replay Logic</h3>
-<p>Out-of-bounds flaws in replay infrastructure.</p>
-</a>
-
-</div>
-
-</section>
-
-<section id="recognition">
-
-<div class="section-title">
-<span></span>
-<h2>Recognition</h2>
-</div>
-
-<div class="recognition-list">
-
-<div class="recognition-item">
-Hall of Fame acknowledgments from Google, Oracle, NASA, Philips, and MoonPay
-</div>
-
-<div class="recognition-item">
-Indian Book of Records — Youngest Ethical Hacker in India
-</div>
-
-<div class="recognition-item">
-Nullcon Goa 2023 Scholarship Recipient
-</div>
-
-<div class="recognition-item">
-29th Rank out of 73,000 teams in a national cybersecurity competition
-</div>
-
-<div class="recognition-item">
-Speaker at multiple security conferences and technical discussions
-</div>
-
-</div>
-
-</section>
-
-<section class="closing">
 
 <p>
-Most research work remains unpublished due to NDAs,
-private engagements, or direct upstream remediation.
-Public disclosures represent only a limited subset
-of total research activity.
+Deep-dive technical write-ups focused on kernel exploitation, driver-level memory corruption, and system-level vulnerability analysis across real-world attack surfaces.
 </p>
 
-</section>
-
-<footer id="contact">
-
-<h2>Contact</h2>
-
-<div class="footer-links">
-<a href="mailto:jhapavitra12@gmail.com">jhapavitra12@gmail.com</a>
-<a href="https://linkedin.com/in/cybersherlock">LinkedIn</a>
+<div class="card">
+Two Oracle, Hundreds of Thousands of Organizations: Inside the Google Workspace Authentication Flaw<br><br>
+Coming Soon
 </div>
 
-</footer>
+<div class="card">
+Unchecked Modem Input: OOB Read in the Linux Kernel t7xx WWAN Driver<br><br>
+<a href="blog/t7xx-oob-writeup.html">Read Writeup</a>
+</div>
+
+<div class="card">
+wIndex Out of Bounds: Host-Controlled Memory Corruption in the MAX3420 UDC Driver<br><br>
+<a href="blog/max3420-oob-writeup.html">Read Writeup</a>
+</div>
+
+<div class="card">
+FOTG210 USB Device Controller: Slab OOB in X3 Functions<br><br>
+<a href="blog/fotg210-oob-writeup.html">Read Writeup</a>
+</div>
+
+<div class="card">
+Race Conditions & Deadlocks: Use-After-Free in the Silicon Labs wfx Wireless Driver<br><br>
+<a href="blog/wfx-use-after-free-writeup.html">Read Writeup</a>
+</div>
+
+<div class="card">
+NTFS3 File System Driver: X2 OOB Flaws in log_replay Infrastructure<br><br>
+<a href="blog/ntfs3-log_replay-oob-writeup.html">Read Writeup</a>
+</div>
+</section>
+
+<section>
+<h2>Recognition</h2>
+
+<ul>
+<li>Multiple Hall of Fame acknowledgments from Google, Oracle, NASA, Philips, and MoonPay</li>
+<li>Listed in the Indian Book of Records as the youngest ethical hacker in India</li>
+<li>Speaker at multiple security conferences</li>
+<li>Nullcon Goa 2023 scholarship recipient with full conference access</li>
+<li>Ranked 29th out of 73,000 teams in a national cybersecurity hackathon</li>
+<li>Contract security research work for Thane Cyber Crime Department</li>
+</ul>
+</section>
+
+<section>
+<h2>Confidential Work Statement</h2>
+
+<p>
+I have only recently begun publishing a small selection of public research. The vast majority of my security work is 
+conducted under strict NDAs or implemented as upstream patches in production code, meaning public disclosures represent 
+only a minor fraction of my total research footprint.
+</p>
+</section>
+
+<section id="contact">
+<h2>Contact</h2>
+
+<p>
+Email:
+<a href="mailto:jhapavitra12@gmail.com">jhapavitra12@gmail.com</a>
+</p>
+
+<p>
+LinkedIn:
+<a href="https://linkedin.com/in/cybersherlock">linkedin.com/in/cybersherlock</a>
+</p>
+</section>
 
 </div>
 
