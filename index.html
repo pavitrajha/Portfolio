@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Pavitra Jha</title>
+
+<link rel="stylesheet" href="style.css" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="noise"></div>
+
+<div class="container">
+
+<nav>
+<div class="logo">PAVITRA JHA</div>
+
+<div class="nav-links">
+<a href="#research">Research</a>
+<a href="#blog">Blog</a>
+<a href="#recognition">Recognition</a>
+<a href="#contact">Contact</a>
+</div>
+</nav>
+
+<header class="hero">
+
+<div class="hero-left">
+
+<div class="tag">
+OFFENSIVE SECURITY RESEARCH
+</div>
+
+<h1>
+Browser, Android & Linux Kernel Security Research
+</h1>
+
+<p class="hero-text">
+Security researcher focused on exploitability-driven vulnerability discovery,
+memory corruption, sandbox boundaries, execution engines, and kernel attack surfaces.
+</p>
+
+<div class="hero-buttons">
+<a href="#blog" class="primary-btn">Read Research</a>
+<a href="https://lore.kernel.org/all/?q=Pavitra+Jha" class="secondary-btn">LKML Activity</a>
+</div>
+
+</div>
+
+<div class="hero-right">
+
+<div class="stat-card">
+<span class="stat-number">9+</span>
+<span class="stat-label">Years Researching Security</span>
+</div>
+
+<div class="stat-card">
+<span class="stat-number">Kernel</span>
+<span class="stat-label">Driver & Memory Safety Research</span>
+</div>
+
+<div class="stat-card">
+<span class="stat-number">V8</span>
+<span class="stat-label">Execution Engine & Exploitation Focus</span>
+</div>
+
+</div>
+
+</header>
+
+<section id="research">
+
+<div class="section-title">
+<span></span>
+<h2>Technical Focus</h2>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h3>Browser Security</h3>
+<p>
+V8 internals, JIT behavior, memory corruption primitives,
+mitigation-aware exploitation, and execution engine research.
+</p>
+</div>
+
+<div class="card">
+<h3>Linux Kernel</h3>
+<p>
+Driver attack surfaces, race conditions, OOB conditions,
+memory safety flaws, and subsystem-level analysis.
+</p>
+</div>
+
+<div class="card">
+<h3>Android Security</h3>
+<p>
+Binder IPC, SELinux policy behavior,
+framework trust boundaries, and privilege escalation paths.
+</p>
+</div>
+
+<div class="card">
+<h3>Reverse Engineering</h3>
+<p>
+ARM64, x86, and x64 reversing across Android,
+Linux, and Windows environments.
+</p>
+</div>
+
+<div class="card">
+<h3>Fuzzing</h3>
+<p>
+Harness design, crash triage,
+coverage-driven fuzzing, and exploitability validation.
+</p>
+</div>
+
+<div class="card">
+<h3>Source Auditing</h3>
+<p>
+Large-scale architecture review,
+hybrid logic/memory corruption discovery,
+and exploitability-first analysis.
+</p>
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<div class="section-title">
+<span></span>
+<h2>Selected Public Record</h2>
+</div>
+
+<div class="timeline">
+
+<div class="timeline-item">
+<h3>Linux Kernel Contributions</h3>
+<p>
+Security-related work involving upstream patches,
+driver analysis, and memory safety research across Linux subsystems.
+</p>
+
+<a href="https://lore.kernel.org/all/?q=Pavitra+Jha">
+View LKML Activity
+</a>
+</div>
+
+<div class="timeline-item">
+<h3>Philips Healthcare Firmware RCE</h3>
+<p>
+Stack-based buffer overflow leading to ROP-assisted remote code execution
+within Philips Image Management System firmware infrastructure.
+</p>
+
+<a href="https://www.philips.com/a-w/security/coordinated-vulnerability-disclosure/hall-of-honors.html">
+Philips Hall of Honors
+</a>
+</div>
+
+<div class="timeline-item">
+<h3>Oracle Infrastructure Disclosure</h3>
+<p>
+Critical information disclosure vulnerability affecting Oracle web infrastructure
+with exposure impact involving large-scale customer data.
+</p>
+
+<a href="https://www.oracle.com/security-alerts/cpujul2024.html">
+Oracle Advisory
+</a>
+</div>
+
+<div class="timeline-item">
+<h3>Conference Research</h3>
+<p>
+Research presentation covering prototype pollution exploitation
+and ReDoS attack patterns in real-world systems.
+</p>
+
+<a href="https://www.linkedin.com/posts/cybersherlock_cybersecurity-nullmeetmumbai-itminstitute-activity-7195110088628416512-Cg-U">
+Conference Post
+</a>
+</div>
+
+</div>
+
+</section>
+
+<section id="blog">
+
+<div class="section-title">
+<span></span>
+<h2>Research Blog</h2>
+</div>
+
+<div class="blog-grid">
+
+<a class="blog-card" href="blog/t7xx-oob-writeup.html">
+<div class="blog-tag">LINUX KERNEL</div>
+<h3>Unchecked Modem Input</h3>
+<p>OOB read in the Linux kernel t7xx WWAN driver.</p>
+</a>
+
+<a class="blog-card" href="blog/max3420-oob-writeup.html">
+<div class="blog-tag">USB</div>
+<h3>wIndex Out of Bounds</h3>
+<p>Host-controlled memory corruption in MAX3420.</p>
+</a>
+
+<a class="blog-card" href="blog/fotg210-oob-writeup.html">
+<div class="blog-tag">DRIVERS</div>
+<h3>FOTG210 Slab OOB</h3>
+<p>Slab out-of-bounds conditions in X3 functions.</p>
+</a>
+
+<a class="blog-card" href="blog/wfx-use-after-free-writeup.html">
+<div class="blog-tag">WIRELESS</div>
+<h3>Race Conditions & UAF</h3>
+<p>Use-after-free in Silicon Labs wfx driver.</p>
+</a>
+
+<a class="blog-card" href="blog/ntfs3-log_replay-oob-writeup.html">
+<div class="blog-tag">FILESYSTEM</div>
+<h3>NTFS3 Replay Logic</h3>
+<p>Out-of-bounds flaws in replay infrastructure.</p>
+</a>
+
+</div>
+
+</section>
+
+<section id="recognition">
+
+<div class="section-title">
+<span></span>
+<h2>Recognition</h2>
+</div>
+
+<div class="recognition-list">
+
+<div class="recognition-item">
+Hall of Fame acknowledgments from Google, Oracle, NASA, Philips, and MoonPay
+</div>
+
+<div class="recognition-item">
+Indian Book of Records — Youngest Ethical Hacker in India
+</div>
+
+<div class="recognition-item">
+Nullcon Goa 2023 Scholarship Recipient
+</div>
+
+<div class="recognition-item">
+29th Rank out of 73,000 teams in a national cybersecurity competition
+</div>
+
+<div class="recognition-item">
+Speaker at multiple security conferences and technical discussions
+</div>
+
+</div>
+
+</section>
+
+<section class="closing">
+
+<p>
+Most research work remains unpublished due to NDAs,
+private engagements, or direct upstream remediation.
+Public disclosures represent only a limited subset
+of total research activity.
+</p>
+
+</section>
+
+<footer id="contact">
+
+<h2>Contact</h2>
+
+<div class="footer-links">
+<a href="mailto:jhapavitra12@gmail.com">jhapavitra12@gmail.com</a>
+<a href="https://linkedin.com/in/cybersherlock">LinkedIn</a>
+</div>
+
+</footer>
+
+</div>
+
+</body>
+</html>
