@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ntfs3 Heap Out-of-Bounds Write in log_replay</title>
+<link rel="stylesheet" href="../style.css" />
+
+<style>
+body {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: #ffffff;
+    color: #111;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-top: 40px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 6px;
+}
+
+p {
+    margin: 12px 0;
+}
+
+code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+}
+
+pre {
+    background: #f6f8fa;
+    border: 1px solid #e5e7eb;
+    padding: 14px;
+    overflow-x: auto;
+    font-size: 13px;
+}
+
+.meta {
+    color: #555;
+    font-size: 13px;
+}
+
+.section {
+    margin-top: 20px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 30px 0;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+<h1>NTFS3 file system driver: Heap out-of-bounds write via unvalidated data_off in log replay</h1>
+
+<p class="meta">
+Paragon ntfs3 driver | Linux kernel | Heap memory corruption via malicious file system image
+</p>
+</header>
+
+<section class="section">
+
+<h2>Summary</h2>
+
+<p>
+A bounds-check omission exists in <code>fs/ntfs3/fslog.c</code> that leads to an attacker-controlled relative heap out-of-bounds write via an unvalidated <code>data_off</code> field in the <code>log_replay()</code> function. The issue affects both the <code>UpdateRecordDataRoot</code> and <code>UpdateRecordDataAllocation</code> code execution branches.
+</p>
+
+<p>
+The flaw triggers during mount-time log recovery of an uncleanly unmounted filesystem. An attacker capable of providing a corrupted or crafted NTFS image can exploit this to corrupt adjacent kernel heap allocations.
+</p>
+
+</section>
+
+<section class="section">
+
+<h2>Vulnerability details</h2>
+
+<p>
+The <code>NTFS_DE</code> directory entry structure contains an attacker-controlled 16-bit field read straight from on-disk filesystem metadata:
+</p>
+
+<pre>
+struct NTFS_DE {
+    struct MFT_REF ref;
+    __le16 size;
+    __le16 key_size;
+    __le16 flags;
+    __le16 reserved;
+    union {
+        struct {
+            __le16 data_off;   /* Attacker-controlled offset */
+            __le16 data_size;
+        } view;
+    };
+};
+</pre>
+
+<p>
+During log replay dispatch operations, this unvalidated <code>data_off</code> field is used directly in destination pointer arithmetic inside a <code>memmove()</code> operation without checking entry bounds:
+</p>
+
+<pre>
+case UpdateRecordDataRoot:
+    root = resident_data(attr);
+    hdr = &root->ihdr;
+
+    if (!check_if_index_root(rec, lrh) || !check_if_root_index(attr, hdr, lrh)) {
+        goto dirty_vol;
+    }
+    
+    e = Add2Ptr(attr, le16_to_cpu(lrh->attr_off));
+    memmove(
+        Add2Ptr(e, le16_to_cpu(e->view.data_off)), /* Destination address calculation */
+        data,
+        dlen
+    );
+    mi->dirty = true;
+    break;
+</pre>
+
+<p>
+The target pointer resolves directly to <code>e + e->view.data_off</code>. Because <code>data_off</code> can be scaled up to <code>0xFFFF</code> (65535), the write range completely escapes the logical boundaries of the <code>NTFS_DE</code> allocation frame.
+</p>
+
+</section>
+
+<section class="section">
+
+<h2>Root cause</h2>
+
+<p>
+The preexisting precondition filters (<code>check_if_index_root</code> and <code>check_if_root_index</code>) ensure structural alignment of record layouts but fail to check fields localized inside the targeted record. 
+</p>
+<p>
+The driver tracks the logical entry boundary using <code>e->size</code>, but fails to use it as a safety constraint during the memory modification path. No validation ensures that:
+</p>
+
+<pre>
+data_off <= e->size  &&  dlen <= e->size - data_off
+</pre>
+
+</section>
+
+<section class="section">
+
+<h2>Minimal trigger configuration</h2>
+
+<p>
+A minimal malformed replay log context to hit the sink requires the following metadata mappings:
+</p>
+
+<pre>
+lrh->record_off   = [Valid ATTR_ROOT offset]
+lrh->attr_off      = [Valid NTFS_DE boundary alignment]
+e->view.data_off  = 0x7FFE
+dlen              = [Attacker-defined byte length]
+
+Execution output:
+e = Add2Ptr(attr, lrh->attr_off)
+memmove(Add2Ptr(e, 0x7FFE), attacker_payload, dlen) -> Out-of-Bounds Heap Write
+</pre>
+
+<p>
+An identical secondary instance of this exact structural bypass is reachable via the <code>UpdateRecordDataAllocation</code> branch:
+</p>
+
+<pre>
+e = Add2Ptr(hdr, le32_to_cpu(aoff));
+memmove(
+    Add2Ptr(e, le16_to_cpu(e->view.data_off)),
+    data,
+    dlen
+);
+</pre>
+
+</section>
+
+<section class="section">
+
+<h2>Impact</h2>
+
+<ul>
+<li>Relative kernel heap out-of-bounds write</li>
+<li>Arbitrary adjacent slab corruption</li>
+<li>Local privilege escalation (LPE) capabilities on systems where local or unprivileged mounting vectors are allowed (e.g., via automount daemons or user namespaces)</li>
+</ul>
+
+</section>
+
+<section class="section">
+
+<h2>Fix</h2>
+
+<p>
+Enforce rigid entry bounds validation constraints inside both functional branches before invoking memory writes:
+</p>
+
+<pre>
+/* UpdateRecordDataRoot Case */
+e = Add2Ptr(attr, le16_to_cpu(lrh->attr_off));
+{
+    u32 off  = le16_to_cpu(e->view.data_off);
+    u32 size = le16_to_cpu(e->size);
+    if (off > size || dlen > size - off)
+        goto dirty_vol;
+}
+memmove(Add2Ptr(e, le16_to_cpu(e->view.data_off)), data, dlen);
+
+/* UpdateRecordDataAllocation Case */
+e = Add2Ptr(hdr, le32_to_cpu(aoff));
+{
+    u32 off  = le16_to_cpu(e->view.data_off);
+    u32 size = le16_to_cpu(e->size);
+    if (off > size || dlen > size - off)
+        goto dirty_vol;
+}
+memmove(Add2Ptr(e, le16_to_cpu(e->view.data_off)), data, dlen);
+</pre>
+
+</section>
+
+<section class="section">
+
+<h2>Affected versions</h2>
+
+<p>
+All Linux kernels from version 5.15 onwards (matching the initial integration of Paragon's <code>ntfs3</code> implementation) where <code>CONFIG_NTFS3_FS</code> is compiled as a built-in or module component.
+</p>
+
+</section>
+
+</div>
+
+</body>
+</html>
