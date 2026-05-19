@@ -16,19 +16,17 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
 body {
   margin: 0;
   background: linear-gradient(180deg, #05070a, #0b0f15);
   color: var(--text);
   font-family: Inter, system-ui, sans-serif;
   line-height: 1.8;
-}
-
-/* centered reading column (key fix) */
-.container {
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 60px 18px 100px;
 }
 
 /* subtle grid */
@@ -40,21 +38,89 @@ body::before {
     linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
   background-size: 48px 48px;
-  opacity: 0.15;
+  opacity: 0.12;
   pointer-events: none;
 }
 
-/* ---------------- HEADER ---------------- */
+/* =========================
+CENTERED COLUMN SYSTEM
+========================= */
+
+.container {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 90px 18px 120px;
+}
+
+/* =========================
+NAVBAR (STICKY PROPER UI)
+========================= */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+
+  width: 100%;
+  background: rgba(5, 7, 10, 0.72);
+  backdrop-filter: blur(16px);
+
+  border-bottom: 1px solid var(--border);
+}
+
+.navbar-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+
+  padding: 14px 18px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-size: 0.78rem;
+  letter-spacing: 3px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-decoration: none;
+
+  padding: 6px 8px;
+  border-radius: 6px;
+
+  transition: 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.05);
+}
+
+/* =========================
+HEADER (HIGH IMPACT ENTRY)
+========================= */
 
 header {
-  margin-bottom: 50px;
+  margin-bottom: 56px;
 }
 
 h1 {
-  font-size: clamp(2.6rem, 5vw, 4rem);
+  font-size: clamp(2.8rem, 5vw, 4rem);
   letter-spacing: -2px;
   line-height: 1.05;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .sub {
@@ -65,10 +131,12 @@ h1 {
   max-width: 70ch;
 }
 
-/* ---------------- SECTIONS ---------------- */
+/* =========================
+SECTION SYSTEM (RHYTHM FIX)
+========================= */
 
 section {
-  margin-bottom: 52px;
+  margin-bottom: 56px;
 }
 
 h2 {
@@ -76,10 +144,12 @@ h2 {
   text-transform: uppercase;
   letter-spacing: 2px;
   color: var(--accent);
+
   display: flex;
-  gap: 10px;
   align-items: center;
-  margin-bottom: 16px;
+  gap: 10px;
+
+  margin-bottom: 18px;
 }
 
 h2::after {
@@ -89,29 +159,39 @@ h2::after {
   background: var(--border);
 }
 
-/* ---------------- CARDS ---------------- */
+/* =========================
+CARD SYSTEM (PUBLICATION FEEL)
+========================= */
 
 .card {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 14px;
+
   padding: 18px 20px;
   margin-bottom: 12px;
-  transition: 0.2s ease;
+
+  transition: 0.18s ease;
+
+  /* subtle professional polish */
+  backdrop-filter: blur(6px);
 }
 
 .card:hover {
   transform: translateY(-2px);
   background: var(--panel-hover);
+  border-color: rgba(124,196,255,0.18);
 }
 
-/* ---------------- BLOG EMPHASIS ---------------- */
-
-section:nth-of-type(2) .card {
-  border-color: rgba(124,196,255,0.15);
+/* make “blog/public record feel more index-like” */
+#blog .card,
+#record .card {
+  border-left: 2px solid rgba(124,196,255,0.25);
 }
 
-/* ---------------- TEXT ---------------- */
+/* =========================
+TEXT
+========================= */
 
 p, li {
   color: var(--muted);
@@ -126,7 +206,9 @@ li {
   margin-bottom: 10px;
 }
 
-/* ---------------- LINKS ---------------- */
+/* =========================
+LINKS
+========================= */
 
 a {
   color: var(--accent);
@@ -135,4 +217,24 @@ a {
 
 a:hover {
   opacity: 0.85;
+}
+
+/* =========================
+RESPONSIVE TUNING
+========================= */
+
+@media (max-width: 720px) {
+  .navbar-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  h1 {
+    font-size: 2.6rem;
+  }
+
+  .container {
+    padding: 70px 16px 100px;
+  }
 }
