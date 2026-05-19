@@ -1,248 +1,333 @@
 :root {
---bg: #07090c;
---bg-secondary: #0d1117;
+  --bg: #07090c;
+  --bg-secondary: #0d1117;
 
---panel: rgba(255,255,255,0.025);
---panel-hover: rgba(255,255,255,0.045);
+  --panel: rgba(255,255,255,0.025);
+  --panel-hover: rgba(255,255,255,0.045);
 
---border: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.08);
 
---text: #f3f6fb;
---muted: #98a2b3;
+  --text: #f3f6fb;
+  --muted: #98a2b3;
 
---accent: #7cc4ff;
---accent-dim: #4b89b6;
+  --accent: #7cc4ff;
+  --accent-dim: #4b89b6;
 
---mono:
-"SF Mono",
-"JetBrains Mono",
-"Fira Code",
-monospace;
+  --mono: "SF Mono","JetBrains Mono","Fira Code",monospace;
+  --sans: "Inter",system-ui,sans-serif;
 
---sans:
-"Inter",
-system-ui,
-sans-serif;
-
-/* tighter + more premium reading column */
---max-width: 880px;
+  --max-width: 860px;
 }
 
+/* =========================
+BASE RESET
+========================= */
+
 * {
-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-margin: 0;
-background: linear-gradient(180deg,#05070a,#0a0d12);
-color: var(--text);
-font-family: var(--sans);
-line-height: 1.8;
-overflow-x: hidden;
-}
-
-/* GRID BACKGROUND (unchanged behavior) */
-body::before {
-content: "";
-position: fixed;
-inset: 0;
-
-background-image:
-linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-
-background-size: 42px 42px;
-opacity: 0.2;
-pointer-events: none;
-}
-
-.noise {
-position: fixed;
-inset: 0;
-pointer-events: none;
-opacity: 0.02;
-background-image: radial-gradient(#fff 0.6px, transparent 0.6px);
-background-size: 8px 8px;
+  margin: 0;
+  background: linear-gradient(180deg, #05070a 0%, #0a0d12 100%);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* =========================
-CENTERED CONTENT CORE FIX
+GRID BACKGROUND
+========================= */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,1));
+  pointer-events: none;
+  opacity: 0.22;
+}
+
+/* =========================
+NOISE
+========================= */
+
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: radial-gradient(#ffffff 0.6px, transparent 0.6px);
+  background-size: 8px 8px;
+}
+
+/* =========================
+TOP NAV (PUBLICATION STYLE)
+========================= */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  backdrop-filter: blur(14px);
+  background: rgba(7, 9, 12, 0.7);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 16px 22px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  color: var(--accent);
+}
+
+.menu {
+  display: flex;
+  gap: 18px;
+}
+
+.menu a {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.menu a:hover {
+  color: white;
+}
+
+/* =========================
+CONTAINER (CENTERED COLUMN)
 ========================= */
 
 .container {
-max-width: var(--max-width);
-margin: 0 auto;
-padding: 56px 22px 120px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 60px 22px 120px;
+  position: relative;
+  z-index: 2;
 }
 
-/* everything aligns to same vertical rhythm */
-section,
-header,
-nav {
-width: 100%;
-}
+/* =========================
+HEADER
+========================= */
 
-/* NAV */
-nav {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 100px;
-padding-bottom: 18px;
-border-bottom: 1px solid var(--border);
-}
-
-.logo {
-font-family: var(--mono);
-letter-spacing: 4px;
-color: var(--accent);
-font-size: 0.8rem;
-}
-
-.nav-links {
-display: flex;
-gap: 26px;
-flex-wrap: wrap;
-}
-
-/* HEADER */
 header {
-margin-bottom: 100px;
+  margin-bottom: 100px;
 }
 
 h1 {
-font-size: clamp(3rem, 6vw, 6rem);
-line-height: 1;
-letter-spacing: -4px;
-margin-bottom: 30px;
+  font-size: clamp(3.2rem, 6vw, 6.5rem);
+  line-height: 0.9;
+  letter-spacing: -4px;
+  font-weight: 800;
+  margin-bottom: 30px;
+  max-width: 760px;
 }
 
-/* IMPORTANT: keeps readability centered feeling */
 .sub {
-max-width: 760px;
-color: var(--muted);
-margin-bottom: 18px;
-padding-left: 18px;
-border-left: 2px solid var(--accent-dim);
+  max-width: 760px;
+  font-size: 1.05rem;
+  color: var(--muted);
+  margin-bottom: 20px;
+  position: relative;
+  padding-left: 22px;
 }
 
-/* SECTION SPACING FIX */
+.sub::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 14px;
+  width: 10px;
+  height: 1px;
+  background: var(--accent-dim);
+}
+
+/* =========================
+SECTIONS
+========================= */
+
 section {
-margin-bottom: 100px;
+  margin-bottom: 90px;
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* HEADINGS */
 h2 {
-font-family: var(--mono);
-font-size: 0.8rem;
-letter-spacing: 2px;
-text-transform: uppercase;
-color: var(--accent);
-display: flex;
-align-items: center;
-gap: 14px;
-margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
 }
 
 h2::after {
-content: "";
-flex: 1;
-height: 1px;
-background: var(--border);
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: var(--border);
 }
 
-/* CARDS = controlled width feel (no full stretch chaos) */
+/* =========================
+CARDS (PUBLICATION STYLE)
+========================= */
+
 .card {
-background: var(--panel);
-border: 1px solid var(--border);
-border-radius: 16px;
-padding: 22px;
-margin-bottom: 14px;
-transition: 0.2s ease;
+  background: var(--panel);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+
+  padding: 26px;
+  margin-bottom: 18px;
+
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .card:hover {
-transform: translateY(-3px);
-background: var(--panel-hover);
-border-color: rgba(124,196,255,0.18);
+  transform: translateY(-3px);
+  background: var(--panel-hover);
+  border-color: rgba(124,196,255,0.18);
 }
 
-/* TEXT */
+/* =========================
+TEXT
+========================= */
+
 p, li {
-color: var(--muted);
+  color: var(--muted);
+  font-size: 1rem;
 }
 
-/* LIST SPACING FIX */
 ul {
-padding-left: 20px;
+  padding-left: 20px;
 }
 
 li {
-margin-bottom: 10px;
-}
-
-/* LINKS */
-a {
-color: var(--accent);
-text-decoration: none;
+  margin-bottom: 14px;
 }
 
 /* =========================
-BLOG = PUBLICATION INDEX FEEL
-(NO TEXT CHANGES, ONLY VISUAL STRUCTURE)
+LINKS
+========================= */
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+a:hover {
+  opacity: 0.85;
+}
+
+/* =========================
+BLOG INDEX IMPROVEMENT
 ========================= */
 
 #blog .card {
-display: flex;
-flex-direction: column;
-gap: 10px;
-}
-
-/* makes blog feel like index entries */
-#blog .card a {
-align-self: flex-start;
-padding-top: 2px;
-}
-
-/* subtle separator rhythm */
-#blog .card {
-position: relative;
-}
-
-#blog .card::before {
-content: "";
-position: absolute;
-top: 0;
-left: 0;
-right: 0;
-height: 1px;
-background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
-opacity: 0.4;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 /* =========================
-MOBILE RESPONSIVE FIX
+SCROLLBAR
+========================= */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1c2430;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090c11;
+}
+
+/* =========================
+SELECTION
+========================= */
+
+::selection {
+  background: var(--accent);
+  color: black;
+}
+
+/* =========================
+MOBILE RESPONSIVENESS
 ========================= */
 
 @media (max-width: 900px) {
-nav {
-flex-direction: column;
-align-items: flex-start;
-gap: 16px;
-}
-
-h1 {
-font-size: 3rem;
-letter-spacing: -2px;
-}
+  h1 {
+    font-size: 3.5rem;
+    line-height: 0.95;
+  }
 }
 
 @media (max-width: 640px) {
-.container {
-padding: 40px 16px 90px;
-}
+  .container {
+    padding: 40px 16px 90px;
+  }
 
-.card {
-padding: 18px;
-}
+  .topbar-inner {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .menu {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  h1 {
+    font-size: 2.8rem;
+    letter-spacing: -2px;
+  }
+
+  .sub {
+    font-size: 1rem;
+    padding-left: 18px;
+  }
+
+  .card {
+    padding: 20px;
+  }
 }
