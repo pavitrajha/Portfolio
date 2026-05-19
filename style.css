@@ -1,175 +1,117 @@
 :root {
   --bg: #07090c;
   --panel: rgba(255,255,255,0.03);
-  --panel-hover: rgba(255,255,255,0.05);
+  --panel-hover: rgba(255,255,255,0.06);
   --border: rgba(255,255,255,0.08);
 
   --text: #f3f6fb;
   --muted: #9aa4b2;
+
   --accent: #7cc4ff;
 
-  --max-width: 780px;
-
-  --mono: "SF Mono","JetBrains Mono","Fira Code",monospace;
-  --sans: "Inter",system-ui,sans-serif;
+  --max: 820px;
 }
-
-/* =========================
-BASE
-========================= */
 
 * {
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   margin: 0;
-  background: linear-gradient(180deg, #05070a 0%, #0b0f14 100%);
+  background: linear-gradient(180deg, #05070a, #0b0f15);
   color: var(--text);
-  font-family: var(--sans);
-  line-height: 1.75;
-  -webkit-font-smoothing: antialiased;
+  font-family: Inter, system-ui, sans-serif;
+  line-height: 1.8;
 }
 
-/* =========================
-CENTERED PUBLICATION LAYOUT
-========================= */
-
+/* centered reading column (key fix) */
 .container {
-  max-width: var(--max-width);
+  max-width: var(--max);
   margin: 0 auto;
-  padding: 72px 20px 120px;
+  padding: 60px 18px 100px;
 }
 
-/* =========================
-TOP NAV (clean editorial bar)
-========================= */
-
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-
-  backdrop-filter: blur(10px);
-  background: rgba(7, 9, 12, 0.75);
-
-  border-bottom: 1px solid var(--border);
+/* subtle grid */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.15;
+  pointer-events: none;
 }
 
-.topbar-inner {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 14px 20px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.brand {
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  letter-spacing: 3px;
-  color: var(--accent);
-}
-
-.menu {
-  display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
-}
-
-.menu a {
-  font-size: 0.8rem;
-  color: var(--muted);
-  text-decoration: none;
-  transition: 0.2s ease;
-}
-
-.menu a:hover {
-  color: var(--text);
-}
-
-/* =========================
-HEADER (strong but clean)
-========================= */
+/* ---------------- HEADER ---------------- */
 
 header {
-  margin-bottom: 70px;
+  margin-bottom: 50px;
 }
 
 h1 {
-  font-size: clamp(2.6rem, 4.8vw, 4rem);
+  font-size: clamp(2.6rem, 5vw, 4rem);
   letter-spacing: -2px;
   line-height: 1.05;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .sub {
   color: var(--muted);
-  font-size: 1.05rem;
-  max-width: 700px;
-
+  border-left: 2px solid rgba(124,196,255,0.25);
   padding-left: 14px;
-  border-left: 2px solid rgba(124, 196, 255, 0.35);
-
   margin-bottom: 12px;
+  max-width: 70ch;
 }
 
-/* =========================
-SECTION TYPOGRAPHY
-========================= */
+/* ---------------- SECTIONS ---------------- */
 
 section {
-  margin-bottom: 64px;
+  margin-bottom: 52px;
 }
 
 h2 {
-  font-family: var(--mono);
   font-size: 0.75rem;
-  letter-spacing: 2px;
   text-transform: uppercase;
+  letter-spacing: 2px;
   color: var(--accent);
-  margin-bottom: 18px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
-/* subtle divider rhythm */
 h2::after {
   content: "";
-  display: block;
   height: 1px;
+  flex: 1;
   background: var(--border);
-  margin-top: 10px;
 }
 
-/* =========================
-CARDS (minimal + refined)
-========================= */
+/* ---------------- CARDS ---------------- */
 
 .card {
-  background: transparent;
+  background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 12px;
-
-  padding: 16px 18px;
-  margin-bottom: 10px;
-
-  transition: all 0.18s ease;
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  transition: 0.2s ease;
 }
 
 .card:hover {
-  border-color: rgba(124, 196, 255, 0.35);
   transform: translateY(-2px);
-  background: rgba(255,255,255,0.02);
+  background: var(--panel-hover);
 }
 
-/* =========================
-TEXT
-========================= */
+/* ---------------- BLOG EMPHASIS ---------------- */
+
+section:nth-of-type(2) .card {
+  border-color: rgba(124,196,255,0.15);
+}
+
+/* ---------------- TEXT ---------------- */
 
 p, li {
   color: var(--muted);
@@ -184,73 +126,13 @@ li {
   margin-bottom: 10px;
 }
 
-/* =========================
-LINKS
-========================= */
+/* ---------------- LINKS ---------------- */
 
 a {
   color: var(--accent);
   text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: 0.2s ease;
 }
 
 a:hover {
-  border-bottom: 1px solid rgba(124,196,255,0.5);
-}
-
-/* =========================
-BLOG SECTION → PUBLICATION INDEX FEEL
-========================= */
-
-#blog .card {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-#blog .card a {
-  font-size: 0.9rem;
-  opacity: 0.9;
-}
-
-/* =========================
-RESPONSIVE DESIGN
-========================= */
-
-@media (max-width: 768px) {
-  .container {
-    padding: 48px 16px 80px;
-  }
-
-  .topbar-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  h1 {
-    font-size: 2.4rem;
-  }
-
-  .menu {
-    gap: 12px;
-  }
-}
-
-/* =========================
-SCROLLBAR (subtle)
-========================= */
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #1c2430;
-  border-radius: 999px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
+  opacity: 0.85;
 }
