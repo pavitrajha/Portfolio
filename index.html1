@@ -5,10 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Pavitra Jha</title>
 <link rel="stylesheet" href="style.css" />
+<!-- OpenGraph / LinkedIn / Social Preview -->
+<meta property="og:title" content="Pavitra Jha" />
+<meta property="og:description" content="Offensive security researcher focused on browser, Android, and Linux kernel security with emphasis on real-world exploitability and system-level vulnerability research." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pavitrajha.github.io" />
+<meta property="og:image" content="https://pavitrajha.github.io/preview.png" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Pavitra Jha" />
+<meta name="twitter:description" content="Offensive security researcher focused on browser, Android, and Linux kernel security." />
+<meta name="twitter:image" content="https://pavitrajha.github.io/preview.png" />
 </head>
 
 <body>
+<nav class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">PAVITRA JHA</div>
 
+    <div class="menu">
+      <a href="#capability">Capability</a>
+      <a href="#record">Public Record</a>
+      <a href="#blog">Blog</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
 <div class="container">
 
 <header>
