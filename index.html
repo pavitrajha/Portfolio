@@ -4,21 +4,208 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Pavitra Jha</title>
-<link rel="stylesheet" href="style.css" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+--bg: #07090c;
+--bg-secondary: #0d1117;
+--panel: rgba(255,255,255,0.03);
+--panel-hover: rgba(255,255,255,0.05);
+--border: rgba(255,255,255,0.08);
+--text: #f3f6fb;
+--muted: #98a2b3;
+--accent: #7cc4ff;
+--accent-dim: #4b89b6;
+
+--sans: "Inter", system-ui, sans-serif;
+--mono: "SF Mono", monospace;
+
+--max: 860px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+margin: 0;
+font-family: var(--sans);
+color: var(--text);
+background: linear-gradient(180deg,#05070a,#0a0d12);
+line-height: 1.8;
+overflow-x: hidden;
+}
+
+/* subtle grid */
+body::before {
+content:"";
+position:fixed;
+inset:0;
+background-image:
+linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+background-size:42px 42px;
+opacity:0.18;
+pointer-events:none;
+}
+
+.container {
+max-width: var(--max);
+margin: 0 auto;
+padding: 60px 22px 120px;
+}
+
+/* NAV */
+nav {
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom: 90px;
+padding-bottom: 16px;
+border-bottom:1px solid var(--border);
+}
+
+.logo {
+font-family: var(--mono);
+letter-spacing: 3px;
+color: var(--accent);
+font-size: 0.8rem;
+}
+
+.nav-links {
+display:flex;
+gap:22px;
+flex-wrap:wrap;
+}
+
+.nav-links a {
+font-family: var(--mono);
+font-size:0.8rem;
+text-transform:uppercase;
+color:var(--muted);
+text-decoration:none;
+}
+
+/* HEADER */
+header {
+margin-bottom: 90px;
+}
+
+h1 {
+font-size: clamp(2.8rem, 6vw, 5rem);
+line-height:1;
+letter-spacing:-3px;
+margin-bottom: 28px;
+}
+
+.sub {
+color: var(--muted);
+margin-bottom: 16px;
+padding-left: 18px;
+border-left: 2px solid var(--accent-dim);
+max-width: 720px;
+}
+
+/* SECTION BASE */
+section {
+margin-bottom: 90px;
+}
+
+h2 {
+font-family: var(--mono);
+font-size: 0.78rem;
+letter-spacing: 2px;
+text-transform: uppercase;
+color: var(--accent);
+display:flex;
+align-items:center;
+gap:12px;
+margin-bottom: 26px;
+}
+
+h2::after {
+content:"";
+flex:1;
+height:1px;
+background:var(--border);
+}
+
+/* CARDS → unified rhythm system */
+.card {
+background: var(--panel);
+border:1px solid var(--border);
+border-radius: 16px;
+padding: 20px 22px;
+margin-bottom: 14px;
+transition: 0.2s ease;
+}
+
+.card:hover {
+transform: translateY(-3px);
+background: var(--panel-hover);
+border-color: rgba(124,196,255,0.2);
+}
+
+/* LISTS */
+ul {
+padding-left: 18px;
+}
+
+li {
+margin-bottom: 10px;
+color: var(--muted);
+}
+
+/* LINKS */
+a {
+color: var(--accent);
+text-decoration:none;
+}
+
+/* BLOG → PUBLICATION INDEX STYLE */
+#blog .card {
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+#blog .card a {
+font-weight: 500;
+}
+
+/* subtle "paper index" feel */
+#blog .card::before {
+content:"";
+height:1px;
+width:100%;
+background:linear-gradient(90deg,transparent,var(--accent-dim),transparent);
+opacity:0.5;
+margin-bottom:6px;
+}
+
+/* CONTACT spacing cleaner */
+#contact p {
+margin-bottom: 10px;
+color: var(--muted);
+}
+
+/* MOBILE */
+@media (max-width: 700px) {
+.nav-links { gap:12px; }
+h1 { letter-spacing: -2px; }
+.container { padding: 40px 16px 90px; }
+}
+</style>
 </head>
 
 <body>
-
-<div class="noise"></div>
 
 <div class="container">
 
 <nav>
 <div class="logo">PAVITRA JHA</div>
-
 <div class="nav-links">
 <a href="#capability">Capability</a>
 <a href="#record">Public Record</a>
@@ -43,23 +230,16 @@ Offensive security researcher focused on browser, Android, and Linux kernel secu
 <h2>Technical Capability</h2>
 
 <div class="card">Browser Security: V8 internals, JIT pipelines, memory corruption primitives, exploitation techniques under modern mitigations</div>
-
 <div class="card">Android Security: framework attack surfaces, Binder IPC, SELinux policy, kernel interaction paths</div>
-
 <div class="card">Linux Kernel Security: driver flaws, race conditions, memory safety issues, upstream fixes analysis</div>
-
 <div class="card">Sandbox & Mitigations: ASLR, KASLR, CFG, CFI, PAC, sandbox escape conditions</div>
-
 <div class="card">Reverse Engineering: ARM64, x86, x64 across Windows, Linux, Android</div>
-
 <div class="card">Fuzzing: structured fuzzing, crash triage, exploitability validation, harness design</div>
-
 <div class="card">Source Audit: large-scale code review and architecture-level vulnerability discovery</div>
 </section>
 
 <section>
 <h2>Research Approach</h2>
-
 <ul>
 <li>Exploitability-first reasoning model</li>
 <li>Architecture-level vulnerability discovery</li>
@@ -80,37 +260,37 @@ Security-related kernel work involving driver-level issues, memory safety fixes,
 
 <div class="card">
 Philips Healthcare Security Vulnerability (Firmware ROP / Image Management System 15.1)<br><br>
-Remote Code Execution (RCE) via a critical stack-based buffer overflow vulnerability in the processing component of Philips Image Management System 15.1 firmware. By overflowing the data buffer and utilizing a Return-Oriented Programming (ROP) chain, arbitrary code execution was achievable on host medical instrumentation. Validated and remediated via coordinated disclosure through Philips Product Security, resulting in a public Philips Hall of Honors induction (2026) in lieu of a standard CVE assignment.<br><br>
+Remote Code Execution (RCE) via a critical stack-based buffer overflow vulnerability in the processing component of Philips Image Management System 15.1 firmware. Validated and remediated via coordinated disclosure through Philips Product Security.<br><br>
 <a href="https://www.philips.com/a-w/security/coordinated-vulnerability-disclosure/hall-of-honors.html">Philips Hall of Honors</a>
 </div>
 
 <div class="card">
-Oracle Security Issue (Critical Customer Data Information Disclosure)<br><br>
-Critical information disclosure vulnerability affecting Oracle web infrastructure that exposed the user data of over 70,000 users, including payment details, email addresses, credentials, physical addresses, and organization information. The issue was resolved via total endpoint elimination through Oracle’s coordinated security disclosure program.<br><br>
+Oracle Security Issue (Critical Data Exposure)<br><br>
+Critical information disclosure vulnerability affecting Oracle web infrastructure resolved via coordinated disclosure.<br><br>
 <a href="https://www.oracle.com/security-alerts/cpujul2024.html">Oracle CPU Advisory</a>
 </div>
 
 <div class="card">
 Conference Research: Prototype Pollution and ReDoS<br><br>
-Research presentation covering prototype pollution exploitation patterns in JavaScript applications and regular expression denial-of-service conditions in real-world web systems.<br><br>
-<a href="https://www.linkedin.com/posts/cybersherlock_cybersecurity-nullmeetmumbai-itminstitute-activity-7195110088628416512-Cg-U">Conference Post</a>
+Research presentation covering prototype pollution and ReDoS patterns.<br><br>
+<a href="#">Conference Post</a>
 </div>
 
 <div class="card">
 Nullcon Goa 2023 Scholarship<br><br>
-Selected scholarship recipient at Nullcon Goa 2023 for security research contributions and participation in offensive security and systems research discussions.<br><br>
-<a href="https://www.linkedin.com/posts/nullcon_nullcongoa2023-infosec-conference-activity-7102622075843993600-64dZ">Nullcon Post</a>
+Selected scholarship recipient at Nullcon Goa 2023.<br><br>
+<a href="#">Nullcon Post</a>
 </div>
 
 <div class="card">
 Podcast: Hackers Behind the Code<br><br>
-Technical podcast discussing offensive security research methodology, vulnerability discovery process, and real-world exploitation workflows.<br><br>
+Technical podcast on offensive security workflows.<br><br>
 <a href="https://open.spotify.com/episode/4q6rhJsXgfwRTaq5ts32MN">Spotify Episode</a>
 </div>
 
 <div class="card">
 Interview: XSS Rat (Technical Discussion)<br><br>
-Long-form technical discussion covering exploitation approaches, vulnerability research workflow, and offensive security engineering perspectives.<br><br>
+Long-form discussion on exploitation approaches.<br><br>
 <a href="https://www.youtube.com/watch?v=K3DENG8kdYA">YouTube Video</a>
 </div>
 </section>
@@ -118,76 +298,57 @@ Long-form technical discussion covering exploitation approaches, vulnerability r
 <section id="blog">
 <h2>Research Blog</h2>
 
-<p>
+<p style="color:var(--muted)">
 Deep-dive technical write-ups focused on kernel exploitation, driver-level memory corruption, and system-level vulnerability analysis across real-world attack surfaces.
 </p>
 
 <div class="card">
-Two Oracle, Hundreds of Thousands of Organizations: Inside the Google Workspace Authentication Flaw<br><br>
+Two Oracle, Hundreds of Thousands of Organizations: Inside the Google Workspace Authentication Flaw<br>
 Coming Soon
 </div>
 
 <div class="card">
-Unchecked Modem Input: OOB Read in the Linux Kernel t7xx WWAN Driver<br><br>
+Unchecked Modem Input: OOB Read in the Linux Kernel t7xx WWAN Driver<br>
 <a href="blog/t7xx-oob-writeup.html">Read Writeup</a>
 </div>
 
 <div class="card">
-wIndex Out of Bounds: Host-Controlled Memory Corruption in the MAX3420 UDC Driver<br><br>
+wIndex Out of Bounds: Host-Controlled Memory Corruption in the MAX3420 UDC Driver<br>
 <a href="blog/max3420-oob-writeup.html">Read Writeup</a>
 </div>
 
 <div class="card">
-FOTG210 USB Device Controller: Slab OOB in X3 Functions<br><br>
+FOTG210 USB Device Controller: Slab OOB in X3 Functions<br>
 <a href="blog/fotg210-oob-writeup.html">Read Writeup</a>
 </div>
 
 <div class="card">
-Race Conditions & Deadlocks: Use-After-Free in the Silicon Labs wfx Wireless Driver<br><br>
+Race Conditions & Deadlocks: Use-After-Free in the Silicon Labs wfx Wireless Driver<br>
 <a href="blog/wfx-use-after-free-writeup.html">Read Writeup</a>
 </div>
 
 <div class="card">
-NTFS3 File System Driver: X2 OOB Flaws in log_replay Infrastructure<br><br>
+NTFS3 File System Driver: X2 OOB Flaws in log_replay Infrastructure<br>
 <a href="blog/ntfs3-log_replay-oob-writeup.html">Read Writeup</a>
 </div>
 </section>
 
 <section>
 <h2>Recognition</h2>
-
 <ul>
 <li>Multiple Hall of Fame acknowledgments from Google, Oracle, NASA, Philips, and MoonPay</li>
 <li>Listed in the Indian Book of Records as the youngest ethical hacker in India</li>
 <li>Speaker at multiple security conferences</li>
-<li>Nullcon Goa 2023 scholarship recipient with full conference access</li>
+<li>Nullcon Goa 2023 scholarship recipient</li>
 <li>Ranked 29th out of 73,000 teams in a national cybersecurity hackathon</li>
 <li>Contract security research work for Thane Cyber Crime Department</li>
 </ul>
 </section>
 
-<section>
-<h2>Confidential Work Statement</h2>
-
-<p>
-I have only recently begun publishing a small selection of public research. The vast majority of my security work is 
-conducted under strict NDAs or implemented as upstream patches in production code, meaning public disclosures represent 
-only a minor fraction of my total research footprint.
-</p>
-</section>
-
 <section id="contact">
 <h2>Contact</h2>
-
-<p>
-Email:
-<a href="mailto:jhapavitra12@gmail.com">jhapavitra12@gmail.com</a>
-</p>
-
-<p>
-LinkedIn:
-<a href="https://linkedin.com/in/cybersherlock">linkedin.com/in/cybersherlock</a>
-</p>
+<p>Email: <a href="mailto:jhapavitra12@gmail.com">jhapavitra12@gmail.com</a></p>
+<p>LinkedIn: <a href="https://linkedin.com/in/cybersherlock">linkedin.com/in/cybersherlock</a></p>
 </section>
 
 </div>
