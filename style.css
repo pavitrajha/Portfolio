@@ -1,14 +1,22 @@
 :root {
   --bg: #07090c;
   --panel: rgba(255,255,255,0.03);
+  --panel-hover: rgba(255,255,255,0.05);
   --border: rgba(255,255,255,0.08);
+
   --text: #f3f6fb;
-  --muted: #98a2b3;
+  --muted: #9aa4b2;
   --accent: #7cc4ff;
-  --max-width: 760px;
+
+  --max-width: 780px;
+
   --mono: "SF Mono","JetBrains Mono","Fira Code",monospace;
   --sans: "Inter",system-ui,sans-serif;
 }
+
+/* =========================
+BASE
+========================= */
 
 * {
   box-sizing: border-box;
@@ -20,10 +28,10 @@ html {
 
 body {
   margin: 0;
-  background: linear-gradient(180deg,#05070a,#0a0d12);
+  background: linear-gradient(180deg, #05070a 0%, #0b0f14 100%);
   color: var(--text);
   font-family: var(--sans);
-  line-height: 1.8;
+  line-height: 1.75;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -34,40 +42,90 @@ CENTERED PUBLICATION LAYOUT
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 64px 20px 120px;
+  padding: 72px 20px 120px;
 }
 
 /* =========================
-HEADER (EDITORIAL STYLE)
+TOP NAV (clean editorial bar)
+========================= */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  backdrop-filter: blur(10px);
+  background: rgba(7, 9, 12, 0.75);
+
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 14px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  color: var(--accent);
+}
+
+.menu {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.menu a {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.menu a:hover {
+  color: var(--text);
+}
+
+/* =========================
+HEADER (strong but clean)
 ========================= */
 
 header {
-  margin-bottom: 80px;
+  margin-bottom: 70px;
 }
 
 h1 {
-  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-size: clamp(2.6rem, 4.8vw, 4rem);
   letter-spacing: -2px;
-  font-weight: 800;
-  margin-bottom: 24px;
   line-height: 1.05;
+  margin-bottom: 20px;
 }
 
 .sub {
   color: var(--muted);
   font-size: 1.05rem;
-  margin-bottom: 14px;
+  max-width: 700px;
+
   padding-left: 14px;
-  border-left: 2px solid rgba(124,196,255,0.35);
-  max-width: 720px;
+  border-left: 2px solid rgba(124, 196, 255, 0.35);
+
+  margin-bottom: 12px;
 }
 
 /* =========================
-SECTION RHYTHM (PUBLICATION FLOW)
+SECTION TYPOGRAPHY
 ========================= */
 
 section {
-  margin-bottom: 72px;
+  margin-bottom: 64px;
 }
 
 h2 {
@@ -76,10 +134,10 @@ h2 {
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 
-/* subtle divider instead of heavy UI */
+/* subtle divider rhythm */
 h2::after {
   content: "";
   display: block;
@@ -89,21 +147,24 @@ h2::after {
 }
 
 /* =========================
-CARDS → CLEAN LIST BLOCKS
+CARDS (minimal + refined)
 ========================= */
 
 .card {
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 18px 20px;
-  margin-bottom: 12px;
-  transition: 0.2s ease;
+  border-radius: 12px;
+
+  padding: 16px 18px;
+  margin-bottom: 10px;
+
+  transition: all 0.18s ease;
 }
 
 .card:hover {
-  border-color: rgba(124,196,255,0.35);
+  border-color: rgba(124, 196, 255, 0.35);
   transform: translateY(-2px);
+  background: rgba(255,255,255,0.02);
 }
 
 /* =========================
@@ -112,7 +173,7 @@ TEXT
 
 p, li {
   color: var(--muted);
-  font-size: 1rem;
+  font-size: 0.98rem;
 }
 
 ul {
@@ -124,7 +185,7 @@ li {
 }
 
 /* =========================
-LINKS (EDITORIAL STYLE)
+LINKS
 ========================= */
 
 a {
@@ -139,38 +200,7 @@ a:hover {
 }
 
 /* =========================
-NAV (MINIMAL HEADER BAR)
-========================= */
-
-nav {
-  max-width: var(--max-width);
-  margin: 0 auto 40px;
-  padding: 14px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--border);
-}
-
-.logo {
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  letter-spacing: 3px;
-  color: var(--accent);
-}
-
-.nav-links {
-  display: flex;
-  gap: 18px;
-}
-
-.nav-links a {
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-
-/* =========================
-BLOG SECTION → PUBLICATION INDEX STYLE
+BLOG SECTION → PUBLICATION INDEX FEEL
 ========================= */
 
 #blog .card {
@@ -181,30 +211,35 @@ BLOG SECTION → PUBLICATION INDEX STYLE
 
 #blog .card a {
   font-size: 0.9rem;
+  opacity: 0.9;
 }
 
 /* =========================
-RESPONSIVE
+RESPONSIVE DESIGN
 ========================= */
 
 @media (max-width: 768px) {
   .container {
-    padding: 40px 16px 80px;
+    padding: 48px 16px 80px;
   }
 
-  nav {
+  .topbar-inner {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
 
   h1 {
-    font-size: 2.6rem;
+    font-size: 2.4rem;
+  }
+
+  .menu {
+    gap: 12px;
   }
 }
 
 /* =========================
-SCROLL IMPROVEMENT
+SCROLLBAR (subtle)
 ========================= */
 
 ::-webkit-scrollbar {
@@ -214,4 +249,8 @@ SCROLL IMPROVEMENT
 ::-webkit-scrollbar-thumb {
   background: #1c2430;
   border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
 }
